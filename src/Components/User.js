@@ -3,10 +3,10 @@ import { Link, Navigate, Outlet, Route } from 'react-router-dom'
 import Login from './Login';
 
 const User = () => {
-    const verified = false;
+  const verified = true;
   return (
     <div>
-  {verified ? <Outlet/> : <Navigate to={"/login"}/>}
+      {verified ? <Outlet /> : <Navigate to={"/login"} />}
     </div>
   )
 }

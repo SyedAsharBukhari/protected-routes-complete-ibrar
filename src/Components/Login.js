@@ -1,25 +1,22 @@
-// src/Login.js
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../Features/Slice/fetch';
 
 function Login() {
+  const [data, setData] = useState({ email: "", password: "" });
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector(state => state.auth);
 
- const [data, setdata] = useState({
-  email: "",
-  password: "",
- })
-const inputhandler = (e) => {
-  const { name, value } = e.target;
-  setdata({...data, [name]: value });
-};
+  const inputHandler = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
 
-
-const submit = (e) => {
-    e.preventDefault()
-console.log(data);
-
-  }
-
+  const submit = (e) => {
+    e.preventDefault();
+    dispatch(loginUser(data));
+  };
 
   return (
     <div className="container d-flex align-items-center justify-content-center vh-100">
@@ -27,16 +24,21 @@ console.log(data);
         <h3 className="text-center mb-4">Login</h3>
         <form onSubmit={submit}>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label" >Email address</label>
-            <input type="email" name="email" className="form-control" id="email" onChange={inputhandler} placeholder="Enter email" />
+            <label htmlFor="email" className="form-label">Email address</label>
+            <input type="email" name="email" className="form-control" id="email" onChange={inputHandler} placeholder="Enter email" />
           </div>
 
           <div className="mb-3">
             <label htmlFor="password" className="form-label">Password</label>
-            <input type="password" name="password" className="form-control" id="password" onChange={inputhandler} placeholder="Password" />
+            <input type="password" name="password" className="form-control" id="password" onChange={inputHandler} placeholder="Password" />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">Login</button>
+          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+          {error && <div className="text-danger mt-2 text-center">{error}</div>}
+          {user && <div className="text-success mt-2 text-center">Login Successful</div>}
         </form>
       </div>
     </div>
